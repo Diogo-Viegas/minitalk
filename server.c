@@ -5,40 +5,58 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/26 11:59:40 by dviegas           #+#    #+#             */
-/*   Updated: 2025/05/26 13:42:13 by dviegas          ###   ########.fr       */
+/*   Created: 2025/06/02 13:26:50 by dviegas           #+#    #+#             */
+/*   Updated: 2025/06/02 14:50:44 by dviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include <signal.h>
-#include <unistd.h>
+#include "./includes/minitalk.h"
 
-void	sig_handler(int signum)
+void	signal_handler(int signum, siginfo_t *s_info, void *context)
 {
-	static unsigned char	c = 0;
-	static int				bit_count = 0;
+	static int	dec = 255;      // Armazena o caractere reconstruído (deveria começar em 0, veja observação abaixo)
+	static int	bits = 0;       // Conta quantos bits já foram recebidos
+	static int	pid = 0;        // PID do client que enviou o sinal
 
-	if (signum == SIGUSR2)
-		c |= (1 << (7 - bit_count));
-	bit_count++;
-	if (bit_count == 8)
+	(void)context;
+	pid = s_info->si_pid;       // Atualiza o PID do client a cada sinal recebido
+
+	// Reconstrução do caractere:
+	if (signum == SIGUSR1)
+		dec ^= (128 >> bits);   // Para SIGUSR1, faz XOR com a máscara (não é o padrão, veja observação)
+	else if (signum == SIGUSR2)
+		dec |= (128 >> bits);   // Para SIGUSR2, seta o bit correspondente
+
+	if (++bits == BIT)          // Quando 8 bits foram recebidos
 	{
-		write(1, &c, 1);
-		c = 0;
-		bit_count = 0;
+		if (dec)
+			ft_printf("%c", dec); // Imprime o caractere reconstruído
+		else
+			ft_printf("\n");      // Se for nulo, imprime nova linha
+		bits = 0;                 // Reseta contadores para o próximo caractere
+		dec = 255;
+	}
+	// Envia ACK para o client após cada bit (deveria ser após cada byte)
+	if (kill(pid, SIGUSR1) == SIG_ERROR)
+	{
+		kill(pid, SIGUSR2);
+		exit(EXIT_FAILURE);
 	}
 }
 
 int	main(void)
 {
-	signal(SIGUSR1,sig_handler);
-	signal(SIGUSR2,sig_handler);
-	ft_printf("Server PID: %d\n", getpid());
-	while (1)
-	{
-		pause();
-	}
+	struct sigaction	sa_sig;
 
-	return (0);
+	sigemptyset(&sa_sig.sa_mask);
+	sigaddset(&sa_sig.sa_mask, SIGINT);
+	sigaddset(&sa_sig.sa_mask, SIGQUIT);
+	sa_sig.sa_handler = 0;
+	sa_sig.sa_flags = SA_SIGINFO;
+	sa_sig.sa_sigaction = signal_handler;
+	sigaction(SIGUSR1, &sa_sig, NULL);
+	sigaction(SIGUSR2, &sa_sig, NULL);
+	ft_printf("PID: %d\n", getpid());
+	while (1)
+		pause();
 }
