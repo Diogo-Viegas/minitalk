@@ -6,7 +6,7 @@
 /*   By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 13:26:50 by dviegas           #+#    #+#             */
-/*   Updated: 2025/06/02 14:50:44 by dviegas          ###   ########.fr       */
+/*   Updated: 2025/06/17 17:29:49 by dviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,25 @@
 
 void	signal_handler(int signum, siginfo_t *s_info, void *context)
 {
-	static int	dec = 255;      // Armazena o caractere reconstruído (deveria começar em 0, veja observação abaixo)
-	static int	bits = 0;       // Conta quantos bits já foram recebidos
-	static int	pid = 0;        // PID do client que enviou o sinal
+	static int	dec = 255;
+	static int	bits = 0;
+	static int	pid = 0;
 
 	(void)context;
-	pid = s_info->si_pid;       // Atualiza o PID do client a cada sinal recebido
-
-	// Reconstrução do caractere:
+	pid = s_info->si_pid;
 	if (signum == SIGUSR1)
-		dec ^= (128 >> bits);   // Para SIGUSR1, faz XOR com a máscara (não é o padrão, veja observação)
+		dec ^= (128 >> bits);
 	else if (signum == SIGUSR2)
-		dec |= (128 >> bits);   // Para SIGUSR2, seta o bit correspondente
-
-	if (++bits == BIT)          // Quando 8 bits foram recebidos
+		dec |= (128 >> bits);
+	if (++bits == BIT)
 	{
 		if (dec)
-			ft_printf("%c", dec); // Imprime o caractere reconstruído
+			ft_printf("%c", dec);
 		else
-			ft_printf("\n");      // Se for nulo, imprime nova linha
-		bits = 0;                 // Reseta contadores para o próximo caractere
+			ft_printf("\n");
+		bits = 0;
 		dec = 255;
 	}
-	// Envia ACK para o client após cada bit (deveria ser após cada byte)
 	if (kill(pid, SIGUSR1) == SIG_ERROR)
 	{
 		kill(pid, SIGUSR2);
