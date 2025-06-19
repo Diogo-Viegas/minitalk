@@ -6,10 +6,9 @@
 /*   By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 11:38:32 by dviegas           #+#    #+#             */
-/*   Updated: 2025/06/18 11:43:48 by dviegas          ###   ########.fr       */
+/*   Updated: 2025/06/19 10:16:43 by dviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #ifndef MINITALK_BONUS_H
 # define MINITALK_BONUS_H

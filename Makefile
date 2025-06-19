@@ -6,7 +6,7 @@
 #    By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 08:55:23 by dviegas           #+#    #+#              #
-#    Updated: 2025/06/18 16:37:55 by dviegas          ###   ########.fr        #
+#    Updated: 2025/06/19 10:35:10 by dviegas          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,7 @@ OBJ_SERVER = $(SRC_SERVER:.c=.o)
 OBJ_CLIENT_BONUS = $(SRC_CLIENT_BONUS:.c=.o)
 OBJ_SERVER_BONUS = $(SRC_SERVER_BONUS:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror -g3 -O3
+FLAGS = -Wall -Wextra -Werror
 
 all: $(SERVER) $(CLIENT)
 
@@ -57,12 +57,16 @@ $(CLIENT_BONUS): $(OBJ_CLIENT_BONUS) $(LIBFT)  $(HEADER_BONUS)
 clean: 
 	rm -rf $(OBJ_CLIENT)
 	rm -rf $(OBJ_SERVER)
+	rm -rf $(OBJ_CLIENT_BONUS)
+	rm -rf $(OBJ_SERVER_BONUS)
 	make clean -C $(LIBFT_DIR)
 
 	
 fclean: clean 
 	rm -f $(CLIENT)
 	rm -f $(SERVER)
+	rm -f $(CLIENT_BONUS)
+	rm -f $(SERVER_BONUS)
 	@rm -f $(LIBFT)
 	@make fclean -C $(LIBFT_DIR)
 

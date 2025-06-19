@@ -6,7 +6,7 @@
 /*   By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/02 13:26:01 by dviegas           #+#    #+#             */
-/*   Updated: 2025/06/17 17:29:13 by dviegas          ###   ########.fr       */
+/*   Updated: 2025/06/19 10:34:33 by dviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	send_message(int pid, char *str)
 	static int	s_pid = 0;
 	static int	bits = 0;
 
-	if (str && pid)
+	if (str)
 		message = ft_strdup(str);
 	if (!message)
 		send_error(NULL, 0, 0);

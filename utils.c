@@ -6,7 +6,7 @@
 /*   By: dviegas <dviegas@student.42lisboa.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 17:27:44 by dviegas           #+#    #+#             */
-/*   Updated: 2025/06/17 17:28:09 by dviegas          ###   ########.fr       */
+/*   Updated: 2025/06/19 10:36:12 by dviegas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	send_error(char *message, int pid, int sig)
 	{
 		free(message);
 	}
-	exit(EXIT_FAILURE);
+	exit(1);
 }
 
 int	send_null(int pid, char *message)
