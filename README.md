@@ -49,7 +49,7 @@ $ Server PID: 7421
 **3. Run the Client**
 Use the PID displayed by the server to send a message.
 Syntax: ./client [SERVER_PID] "MESSAGE"
-$ ./client 7421 "Hello 42 Lisboa! This is Minitalk."
+`./client 7421 "Hello 42 Lisboa! This is Minitalk."`
 
 ### ⚙️ Constraints and Allowed Functions
 
