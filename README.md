@@ -42,9 +42,9 @@ $ make
 
 **2. Start the Server**
 Execute the server first to obtain its PID.
-$ ./server
+`./server`
 Example Output:
-$ Server PID: 7421
+`Server PID: 7421`
 
 **3. Run the Client**
 Use the PID displayed by the server to send a message.
